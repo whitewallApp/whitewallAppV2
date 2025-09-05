@@ -1,14 +1,15 @@
 import { router } from 'expo-router';
 import { useEffect, useState } from "react";
-import { ScrollView, TouchableOpacity, View } from "react-native";
+import { Linking, ScrollView, TouchableOpacity, View } from "react-native";
 import { ActivityIndicator, Card, FAB, Portal, Provider } from "react-native-paper";
-import { API_KEY, BASE_URL, fetchData } from "./utils/api";
+import { API_KEY, BASE_URL, fetchBranding, fetchData } from "./utils/api";
 import { styles } from "./utils/Stylesheet";
 
 
 
 export default function Categories() {
   const [data, setData] = useState<any>(null);
+  const [menuItems, setMenuItems] = useState<any>(null);
   const [loading, setLoading] = useState<Boolean>(true);
   const [open, setOpen] = useState(false);
   
@@ -16,6 +17,19 @@ export default function Categories() {
     const hello = fetchData(API_KEY).then(response => {
       setData(response)
       setLoading(false);
+    })
+    const test = fetchBranding(API_KEY).then(response => {
+      const menuList = response["menuItems"];
+      let menuArray = [];
+      menuList.forEach(menuItem => {
+        menuArray.push({
+          icon: menuItem.icon,
+          label: menuItem.title,
+          onPress: () => menuPress(menuItem.link)
+        })
+      });
+      menuArray.push({ icon: "tune", label: "Settings", onPress: () => router.navigate("/settings") })
+      setMenuItems(menuArray);
     })
   }, []);
 
@@ -44,12 +58,7 @@ export default function Categories() {
             <FAB.Group
               open={open}
               icon={open ? "close" : "menu"}   // icon changes when open
-              actions={[
-                { icon: "web", label: "Website", onPress: () => console.log("Edit pressed") },
-                { icon: "facebook", label: "Facebook", onPress: () => console.log("Edit pressed") },
-                { icon: "instagram", label: "Instagram", onPress: () => console.log("Delete pressed") },
-                { icon: "tune", label: "Settings", onPress: () => router.navigate("/settings") },
-              ]}
+              actions={menuItems}
               onStateChange={({ open }) => setOpen(open)}
               onPress={() => {
                 if (open) {
@@ -62,4 +71,10 @@ export default function Categories() {
       </ScrollView>
     </Provider>
   );
+}
+
+
+const menuPress = (link: string) => {
+  Linking.openURL(link).catch(error => {
+  })
 }
