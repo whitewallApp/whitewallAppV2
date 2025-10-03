@@ -1,7 +1,8 @@
-export const API_BASE = "http://172.25.64.1/requests/v1";
+import configData from "../utils/config.json";
 
-export const BASE_URL = "http://172.25.64.1"
-export const API_KEY = "0abb68a42da22fb9d5fe7ed7d1a918b81c9355920cafd707dde065749169f774";
+export const API_BASE = configData.base_url + configData.api_base
+export const BASE_URL = configData.base_url;
+export const API_KEY = configData.api_key;
 
 export async function fetchData(apiKey: string) {
     console.log(`${API_BASE}/data?apikey=${apiKey}`);

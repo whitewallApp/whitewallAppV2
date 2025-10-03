@@ -1,0 +1,34 @@
+name: Build and Deploy Android
+
+on:
+  workflow_dispatch:
+    inputs:
+      style_file:
+        description: "Custom CSS filename"
+        required: true
+      custom_config:
+        description: "Custom config file"
+        required: true
+
+jobs:
+  build:
+    runs-on: self-hosted   # runs on your Proxmox CT runner
+    steps:
+      # 1. Checkout repo
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 3. Apply custom files from inputs
+      - name: Apply custom files
+        run: |
+          echo "Applying style file: ${{ github.event.inputs.style_file }}"
+          echo "Applying config: ${{ github.event.inputs.custom_config }}"
+
+          # Copy from your repo (adjust paths as needed)
+          cp app/utils/${{ github.event.inputs.style_file }} || echo "Style not found"
+          cp app/utils/${{ github.event.inputs.custom_config }} || echo "Config not found"
+
+      # 4. Deploy
+      - name: Deploy
+        run: |
+          echo "Deploying to ${{ github.event.inputs.environment }}..."
