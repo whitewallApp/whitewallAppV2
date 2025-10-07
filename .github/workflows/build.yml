@@ -32,14 +32,12 @@ jobs:
           cp -f /mnt/shared/${{ github.event.inputs.output_file }}/${{ github.event.inputs.custom_config }} app/utils/config.json || echo "Config not found"
       
       - name: Grant execute permission for Gradlew
-        run: |
-          cd android
-          chmod +x ./gradlew
+        working-directory: android
+        run: chmod +x gradlew
 
-      # 3. Compile the App
       - name: Build App
-        run: |
-          ./gradlew bundleRelease
+        working-directory: android
+        run: ./gradlew bundleRelease
       
       - name: Copy App
         run: |
