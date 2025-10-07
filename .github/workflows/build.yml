@@ -28,8 +28,8 @@ jobs:
           echo "Applying config: ${{ github.event.inputs.custom_config }}"
 
           # Copy from your repo (adjust paths as needed)
-          cp /mnt/shared/${{ github.event.inputs.output_file }}/${{ github.event.inputs.style_file }} app/utils/Stylesheet.tsx || echo "Style not found"
-          cp /mnt/shared/${{ github.event.inputs.output_file }}/${{ github.event.inputs.custom_config }} app/utils/config.json || echo "Config not found"
+          cp -f /mnt/shared/${{ github.event.inputs.output_file }}/${{ github.event.inputs.style_file }} app/utils/Stylesheet.tsx || echo "Style not found"
+          cp -f /mnt/shared/${{ github.event.inputs.output_file }}/${{ github.event.inputs.custom_config }} app/utils/config.json || echo "Config not found"
       
       # 3. Compile the App
       - name: Build App
