@@ -53,7 +53,9 @@ jobs:
 
       - name: Build App
         working-directory: android
-        run: ./gradlew bundleRelease
+        run: 
+          ./gradlew clean
+          ./gradlew bundleRelease
       
       - name: Copy App
         run: |
