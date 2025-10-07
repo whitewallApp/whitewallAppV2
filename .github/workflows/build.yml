@@ -17,7 +17,7 @@ jobs:
   build:
     runs-on: self-hosted   # runs on your Proxmox CT runner
     env:
-      ANDROID_HOME: /usr/lib/android-sdk/
+      ANDROID_HOME: /usr/lib/android-sdk/ndk
     steps:
       # 1. Checkout repo
       - name: Checkout code
