@@ -35,6 +35,20 @@ jobs:
         working-directory: android
         run: chmod +x gradlew
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install JS dependencies
+        run: npm ci
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
       - name: Build App
         working-directory: android
         run: ./gradlew bundleRelease
