@@ -31,11 +31,14 @@ jobs:
           cp -f /mnt/shared/${{ github.event.inputs.output_file }}/${{ github.event.inputs.style_file }} app/utils/Stylesheet.tsx || echo "Style not found"
           cp -f /mnt/shared/${{ github.event.inputs.output_file }}/${{ github.event.inputs.custom_config }} app/utils/config.json || echo "Config not found"
       
-      # 3. Compile the App
-      - name: Build App
+      - name: Grant execute permission for Gradlew
         run: |
           cd android
           chmod +x ./gradlew
+
+      # 3. Compile the App
+      - name: Build App
+        run: |
           ./gradlew bundleRelease
       
       - name: Copy App
