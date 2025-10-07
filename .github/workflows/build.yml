@@ -4,10 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       style_file:
-        description: "Custom CSS filename"
+        description: "Custom CSS filepath"
         required: true
       custom_config:
-        description: "Custom config file"
+        description: "Custom config filepath"
+        required: true
+      output_file:
+        description: "Custom output filepath"
         required: true
 
 jobs:
@@ -18,17 +21,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # 3. Apply custom files from inputs
+      # 2. Apply custom files from inputs
       - name: Apply custom files
         run: |
           echo "Applying style file: ${{ github.event.inputs.style_file }}"
           echo "Applying config: ${{ github.event.inputs.custom_config }}"
 
           # Copy from your repo (adjust paths as needed)
-          cp app/utils/${{ github.event.inputs.style_file }} || echo "Style not found"
-          cp app/utils/${{ github.event.inputs.custom_config }} || echo "Config not found"
-
-      # 4. Deploy
-      - name: Deploy
+          cp /mnt/shared/${{ github.event.inputs.style_file }} app/utils/Stylesheet.tsx || echo "Style not found"
+          cp /mnt/shared/${{ github.event.inputs.custom_config }} app/utils/config.json || echo "Config not found"
+      
+      # 3. Compile the App
+      - name: Build App
         run: |
-          echo "Deploying to ${{ github.event.inputs.environment }}..."
+          cd android
+          ./gradlew bundleRelease
+      
+      - name: Copy App
+        run: |
+          cp android/app/build/generated/outputs/bundle/release/app-release.aab /mnt/shared/${{ github.event.inputs.output_file }}
