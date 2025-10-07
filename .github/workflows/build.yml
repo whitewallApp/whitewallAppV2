@@ -60,4 +60,4 @@ jobs:
       
       - name: Copy App
         run: |
-          cp android/app/build/generated/outputs/bundle/release/app-release.aab /mnt/shared/${{ github.event.inputs.output_file }}/app-release.aab
+          cp android/app/build/outputs/bundle/release/app-release.aab /mnt/shared/${{ github.event.inputs.output_file }}/app-release.aab
